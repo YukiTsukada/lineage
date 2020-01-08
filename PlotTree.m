@@ -52,6 +52,22 @@
     for n = 1:HCTn1_Rnum
         line([absTimePointA0(n) absTimePointNEBD(n)],[n n],'LineWidth',3);
     end
+    hold on;
+    % mark death
+       DeathIdx = find(HCTn1(:,18));
+       [size_Didx ~] = size(DeathIdx);
+       DidxPosition = -100*ones(size_Didx);
+       plot(DidxPosition,DeathIdx,'.','color','k');
+    % mark lost
+       LostIdx = find(HCTn1(:,19));
+       [size_Lidx ~] = size(LostIdx);
+       LidxPosition = -100*ones(size_Lidx);
+       plot(LidxPosition,LostIdx,'o','color','b');
+     % mark Survive
+       SurIdx = find(HCTn1(:,20));
+       [size_Sidx ~] = size(SurIdx);
+       SidxPosition = -100*ones(size_Sidx);
+       plot(SidxPosition,SurIdx,'*','color','r');
     
     
     
