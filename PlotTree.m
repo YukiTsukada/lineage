@@ -21,7 +21,7 @@
         if (HCTn1(j,1) > 1)
           Cum1(j) = sum(TIMEPOINTS(1:HCTn1(j,1)-1));
         end
-        absTimPointG1(j) =  HCTn1(j,10)+ Cum1(j);
+        absTimePointG1(j) =  HCTn1(j,10)+ Cum1(j);
     end
     % calculate absolute time points for G2
     Cum2 = zeros(1,HCTn1_Rnum);
@@ -29,7 +29,7 @@
         if (HCTn1(k,11) > 1)
           Cum2(k) = sum(TIMEPOINTS(1:HCTn1(k,11)-1));
         end
-        absTimPointG2(k) =  HCTn1(k,15)+ Cum2(k);
+        absTimePointG2(k) =  HCTn1(k,15)+ Cum2(k);
     end
     % calculate absolute time points for NEBD
     Cum3 = zeros(1,HCTn1_Rnum);
@@ -37,7 +37,7 @@
         if (HCTn1(l,11) > 1)
           Cum3(l) = sum(TIMEPOINTS(1:HCTn1(l,11)-1));
         end
-        absTimPointNEBD(l) =  HCTn1(l,16)+ Cum3(l);
+        absTimePointNEBD(l) =  HCTn1(l,16)+ Cum3(l);
     end
      % calculate absolute time points for A0
     Cum4 = zeros(1,HCTn1_Rnum);
@@ -45,11 +45,13 @@
         if (HCTn1(m,11) > 1)
           Cum4(m) = sum(TIMEPOINTS(1:HCTn1(l,11)-1));
         end
-        absTimPointA0(m) =  HCTn1(m,17)+ Cum4(m);
+        absTimePointA0(m) =  HCTn1(m,17)+ Cum4(m);
     end
     
-
-    
+    % draw A0-NEBD
+    for n = 1:HCTn1_Rnum
+        line([absTimePointA0(n) absTimePointNEBD(n)],[n n],'LineWidth',3);
+    end
     
     
     
