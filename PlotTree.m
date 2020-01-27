@@ -43,16 +43,45 @@
     Cum4 = zeros(1,HCTn1_Rnum);
     for m = 1:HCTn1_Rnum
         if (HCTn1(m,11) > 1)
-          Cum4(m) = sum(TIMEPOINTS(1:HCTn1(l,11)-1));
+          Cum4(m) = sum(TIMEPOINTS(1:HCTn1(m,11)-1));
         end
         absTimePointA0(m) =  HCTn1(m,17)+ Cum4(m);
     end
     
-    % draw A0-NEBD
+    % draw start-A0 for parent cells
     for n = 1:HCTn1_Rnum
-        line([absTimePointA0(n) absTimePointNEBD(n)],[n n],'LineWidth',3);
+        if(strlength(CellLineage(n))==1)
+            line([0 absTimePointA0(n)],[n n],'Color','r','LineWidth',3);
+        end
     end
+    
+    % draw A0-NEBD for children cells
+    for nn = 1:HCTn1_Rnum
+        if(strlength(CellLineage(nn)) > 1)
+            ShortenLineage_ = extractBefore(CellLineage(nn),strlength(CellLineage(nn)));
+            for mm = 2:HCTn1_Rnum
+                if(strcmp(ShortenLineage_,CellLineage(mm)))
+                  line([absTimePointA0(mm) absTimePointA0(nn)],[nn nn],'Color','k','LineWidth',3);
+                end
+            end
+        end
+    end
+    
+    % draw branches at A0
     hold on;
+    x = 1:HCTn1_Rnum;
+    plot(absTimePointNEBD,x,'ro');
+    for ll = 2:HCTn1_Rnum 
+       if(absTimePointA0(ll) ~= 0 && strlength(CellLineage(ll))>1)
+         ShortenLineage = extractBefore(CellLineage(ll),strlength(CellLineage(ll)));
+         for mmm = 2:HCTn1_Rnum
+            if(strcmp(ShortenLineage,CellLineage(mmm)))
+              line([absTimePointA0(mmm) absTimePointA0(mmm)],[mmm ll],'LineWidth',1);
+            end
+         end
+       end
+    end
+
     % mark death
        DeathIdx = find(HCTn1(:,18));
        [size_Didx ~] = size(DeathIdx);
@@ -68,6 +97,10 @@
        [size_Sidx ~] = size(SurIdx);
        SidxPosition = -100*ones(size_Sidx);
        plot(SidxPosition,SurIdx,'*','color','r');
-    
-    
-    
+  
+    %  Graph settings
+       legend('* survive','o lost','. death');
+       grid on; ylabel('Cell #'); xlabel('time');
+       axis_r = axis;  axis_r(1) = -200;  axis(axis_r);  
+       set(gca,'YDIR','reverse');
+       
