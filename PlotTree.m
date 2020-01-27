@@ -42,7 +42,7 @@
      % calculate absolute time points for Ao
     Cum4 = zeros(1,HCTn1_Rnum);
     for m = 1:HCTn1_Rnum
-        if (HCTn1(m,11) > 1)
+        if (HCTn1(m,11) > 1 & HCTn1(m,17) ~= 0)
           Cum4(m) = sum(TIMEPOINTS(1:HCTn1(m,11)-1));
         end
         absTimePointAo(m) =  HCTn1(m,17)+ Cum4(m);
@@ -55,12 +55,14 @@
         end
     end
     
-    % draw Ao-NEBD for children cells
+    % draw Ao-Ao for children cells
     for nn = 1:HCTn1_Rnum
         if(strlength(CellLineage(nn)) > 1)
             ShortenLineage_ = extractBefore(CellLineage(nn),strlength(CellLineage(nn)));
-            for mm = 2:HCTn1_Rnum
-                if(strcmp(ShortenLineage_,CellLineage(mm)))
+            for mm = 1:HCTn1_Rnum
+                if(strcmp(ShortenLineage_,CellLineage(mm))&& absTimePointAo(nn)==0)
+                  line([absTimePointAo(mm) absTimePointAo(nn)],[nn nn],'Color','k','LineWidth',1,'LineStyle',':');
+                elseif(strcmp(ShortenLineage_,CellLineage(mm))&& absTimePointAo(nn)~=0)
                   line([absTimePointAo(mm) absTimePointAo(nn)],[nn nn],'Color','k','LineWidth',3);
                 end
             end
@@ -70,11 +72,12 @@
     % draw branches at Ao
     hold on;
     x = 1:HCTn1_Rnum;
-    plot(absTimePointNEBD,x,'r^'); % plot NEBD points
-    for ll = 2:HCTn1_Rnum 
-       if(absTimePointAo(ll) ~= 0 && strlength(CellLineage(ll))>1)
+    plot(absTimePointNEBD,x,'r.'); % plot NEBD points
+    for ll = 1:HCTn1_Rnum 
+       %if(absTimePointAo(ll) ~= 0 && strlength(CellLineage(ll))>0)
+       if(strlength(CellLineage(ll))>0)
          ShortenLineage = extractBefore(CellLineage(ll),strlength(CellLineage(ll)));
-         for mmm = 2:HCTn1_Rnum
+         for mmm = 1:HCTn1_Rnum
             if(strcmp(ShortenLineage,CellLineage(mmm)))
               line([absTimePointAo(mmm) absTimePointAo(mmm)],[mmm ll],'LineWidth',1);
             end
@@ -86,7 +89,7 @@
        DeathIdx = find(HCTn1(:,18));
        [size_Didx ~] = size(DeathIdx);
        DidxPosition = -100*ones(size_Didx);
-       plot(DidxPosition,DeathIdx,'.','color','k');
+       plot(DidxPosition,DeathIdx,'^','color','k');
     % mark lost
        LostIdx = find(HCTn1(:,19));
        [size_Lidx ~] = size(LostIdx);
@@ -99,8 +102,8 @@
        plot(SidxPosition,SurIdx,'*','color','r');
   
     %  Graph settings
-       legend('* survive','o lost','. death');
+       legend('* survive','o lost','triangle death','. NEBD');
        grid on; ylabel('Cell #'); xlabel('time');
        axis_r = axis;  axis_r(1) = -200;  axis(axis_r);  
-       set(gca,'YDIR','reverse');
+       set(gca,'YDIR','reverse');title('Lineage for Ao-Ao');
        
