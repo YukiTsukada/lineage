@@ -61,7 +61,7 @@
             ShortenLineage_ = extractBefore(CellLineage(nn),strlength(CellLineage(nn)));
             for mm = 1:HCTn1_Rnum
                 if(strcmp(ShortenLineage_,CellLineage(mm))&& absTimePointAo(nn)==0)
-                  line([absTimePointAo(mm) absTimePointAo(nn)],[nn nn],'Color','k','LineWidth',1,'LineStyle',':');
+                  line([absTimePointAo(mm) absTimePointNEBD(nn)],[nn nn],'Color','k','LineWidth',1,'LineStyle',':');
                 elseif(strcmp(ShortenLineage_,CellLineage(mm))&& absTimePointAo(nn)~=0)
                   line([absTimePointAo(mm) absTimePointAo(nn)],[nn nn],'Color','k','LineWidth',3);
                 end
@@ -72,7 +72,9 @@
     % draw branches at Ao
     hold on;
     x = 1:HCTn1_Rnum;
-    plot(absTimePointNEBD,x,'r.'); % plot NEBD points
+    NEBDidx = find(absTimePointAo(x));
+    plot(absTimePointNEBD(NEBDidx),NEBDidx,'r.'); % plot NEBD points
+  
     for ll = 1:HCTn1_Rnum 
        %if(absTimePointAo(ll) ~= 0 && strlength(CellLineage(ll))>0)
        if(strlength(CellLineage(ll))>0)
@@ -90,17 +92,19 @@
        [size_Didx ~] = size(DeathIdx);
        DidxPosition = -100*ones(size_Didx);
        plot(DidxPosition,DeathIdx,'^','color','k');
+       plot(absTimePointNEBD(DeathIdx),DeathIdx,'^','color','k');
     % mark lost
        LostIdx = find(HCTn1(:,19));
        [size_Lidx ~] = size(LostIdx);
        LidxPosition = -100*ones(size_Lidx);
        plot(LidxPosition,LostIdx,'o','color','b');
+       plot(absTimePointNEBD(LostIdx),LostIdx,'o','color','b');
      % mark Survive
        SurIdx = find(HCTn1(:,20));
        [size_Sidx ~] = size(SurIdx);
        SidxPosition = -100*ones(size_Sidx);
        plot(SidxPosition,SurIdx,'*','color','r');
-  
+       plot(absTimePointNEBD(SurIdx),SurIdx,'*','color','r');
     %  Graph settings
        legend('* survive','o lost','triangle death','. NEBD');
        grid on; ylabel('Cell #'); xlabel('time');
