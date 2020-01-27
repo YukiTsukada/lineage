@@ -1,7 +1,7 @@
 # lineage
 Visualizing cell division tracking data
 
-draw Ao to Ao as black lines
+draw Ao to Ao as black lines (start to Ao as dotted lines for lost cells)
 
 plot NEBD point as red dots
 
