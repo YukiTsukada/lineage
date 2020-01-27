@@ -1,2 +1,2 @@
 # lineage
-These scripts are for visualizing cell division tracking data
+Visualizing cell division tracking data
